@@ -48,16 +48,14 @@ Abrí [http://localhost:3000](http://localhost:3000).
 
 ```
 src/
-  app/         # rutas de Next.js (App Router)
-  components/  # componentes compartidos
-  lib/         # utilidades y helpers
-  hooks/       # custom hooks de React
-  types/       # tipos compartidos
-e2e/           # tests e2e de Playwright
+  app/  # rutas de Next.js (App Router)
+e2e/    # tests e2e de Playwright
 ```
 
-Los tests unitarios/integración se co-locan junto al archivo que prueban
-(`Component.tsx` + `Component.test.tsx`).
+El template no impone una organización para código compartido (componentes,
+hooks, utilidades, tipos) — armá esas carpetas dentro de `src/` con el criterio
+que prefieras a medida que el proyecto lo pida. Los tests unitarios/integración
+se co-locan junto al archivo que prueban (`Component.tsx` + `Component.test.tsx`).
 
 ## Variables de entorno
 
