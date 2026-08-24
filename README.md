@@ -16,7 +16,7 @@ y herramientas más usadas ya listas.
 
 ## Requisitos
 
-- Node.js 20+
+- Node.js 22.22.2+, 24.15.0+ o 26+ (requerido por `jsdom`, usado en los tests)
 - [pnpm](https://pnpm.io)
 
 ## Empezar
