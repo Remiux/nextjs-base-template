@@ -1,0 +1,4 @@
+{
+  "intro": "To get started, edit <code>src/app/[locale]/page.tsx</code>. Rename the project in <code>src/config/site.ts</code> and add translations in <code>i18n-builder/messages</code>.",
+  "docs": "Documentation"
+}

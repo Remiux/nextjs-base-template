@@ -50,3 +50,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# i18n: compiled by `pnpm i18n:build` from i18n-builder/messages/
+/messages/*.json
+/messages/*.d.json.ts

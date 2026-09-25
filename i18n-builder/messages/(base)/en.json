@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "description": "A Next.js starter with TypeScript, Tailwind CSS, internationalization, testing and CI ready to go."
+  },
+  "not-found": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist.",
+    "back-home": "Go back home"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "retry": "Try again"
+  },
+  "locale-switcher": {
+    "label": "Language",
+    "locale": "{locale, select, en {English} es {Español} other {Unknown}}"
+  }
+}

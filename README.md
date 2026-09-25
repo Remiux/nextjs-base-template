@@ -6,6 +6,7 @@ y herramientas más usadas ya listas.
 ## Stack
 
 - [Next.js](https://nextjs.org) (App Router, TypeScript estricto, `typedRoutes`)
+- [next-intl](https://next-intl.dev) para internacionalización (inglés y español), con un builder que compila las traducciones por ruta
 - [Tailwind CSS](https://tailwindcss.com) v4
 - [ESLint](https://eslint.org) + [Prettier](https://prettier.io) (con `prettier-plugin-tailwindcss`), orden de imports y reglas para tests (Vitest, Testing Library, jest-dom, Playwright)
 - [Zod](https://zod.dev) para validar variables de entorno
@@ -28,20 +29,24 @@ pnpm install
 pnpm dev
 ```
 
-Abrí [http://localhost:3000](http://localhost:3000).
+Abrí [http://localhost:3000](http://localhost:3000): te redirige a `/en` o `/es`
+según el idioma del navegador.
 
-Para adaptar el template a tu proyecto, cambiá el nombre, la descripción y el idioma
-en `src/config/site.ts`: de ahí leen la metadata, `robots.txt` y el sitemap.
+Para adaptar el template a tu proyecto, cambiá el nombre en `src/config/site.ts`
+(de ahí leen la metadata, `robots.txt` y el sitemap) y los textos en
+`i18n-builder/messages/`.
 
 ## Scripts
 
 | Script                  | Descripción                                                                                 |
 | ----------------------- | ------------------------------------------------------------------------------------------- |
-| `pnpm dev`              | Levanta el servidor de desarrollo                                                           |
-| `pnpm build`            | Build de producción                                                                         |
+| `pnpm dev`              | Levanta el servidor de desarrollo y recompila las traducciones al guardar                   |
+| `pnpm build`            | Compila las traducciones y hace el build de producción                                      |
 | `pnpm start`            | Sirve el build de producción                                                                |
 | `pnpm lint`             | Corre ESLint (falla también con warnings)                                                   |
-| `pnpm typecheck`        | Genera los tipos de rutas de Next.js y corre `tsc --noEmit`                                 |
+| `pnpm typecheck`        | Compila las traducciones, genera los tipos de rutas de Next.js y corre `tsc --noEmit`       |
+| `pnpm i18n:build`       | Compila `i18n-builder/messages/` en `messages/<locale>.json`                                |
+| `pnpm i18n:check`       | Verifica que todos los idiomas tengan las mismas claves y que `src/` no use claves de más   |
 | `pnpm format`           | Formatea el proyecto con Prettier                                                           |
 | `pnpm format:check`     | Verifica el formateo sin escribir cambios                                                   |
 | `pnpm test`             | Corre los tests unitarios/integración (Vitest)                                              |
@@ -59,10 +64,17 @@ con `pnpm build && pnpm start`.
 
 ```
 src/
-  app/     # rutas de Next.js (App Router), incluye not-found, error, robots y sitemap
-  config/  # configuración del sitio (nombre, descripción, URL)
-  env.ts   # variables de entorno validadas con Zod
-e2e/       # tests e2e de Playwright
+  app/
+    [locale]/     # páginas localizadas (layout, page, not-found, error)
+    robots.ts, sitemap.ts, global-error.tsx
+  components/     # componentes compartidos (p. ej. el selector de idioma)
+  config/         # configuración del sitio (nombre, URL)
+  i18n/           # configuración de next-intl (idiomas, routing, navegación, SEO)
+  test-utils/     # helpers de tests (p. ej. `renderWithIntl`)
+  env.ts          # variables de entorno validadas con Zod
+  proxy.ts        # negociación de idioma y redirects
+i18n-builder/     # traducciones fuente y el builder que las compila
+e2e/              # tests e2e de Playwright
 ```
 
 El template no impone una organización para código compartido (componentes,
@@ -79,6 +91,25 @@ Las variables se validan en `src/env.ts`: si falta una obligatoria o tiene un
 formato inválido, el build falla con un mensaje claro. Al agregar una variable
 nueva, sumala al schema de `src/env.ts` y a `.env.example`. Importá siempre
 `env` desde `@/env` en lugar de leer `process.env` directamente.
+
+## Internacionalización
+
+Usa [next-intl](https://next-intl.dev) con el idioma como prefijo de la URL
+(`/en/...`, `/es/...`) y un builder propio que compila traducciones organizadas
+por ruta.
+
+- Las traducciones se editan en `i18n-builder/messages/<ruta>/<idioma>.json`. El
+  builder las junta en `messages/<idioma>.json`, que se genera y no se commitea.
+  Detalle completo en [`i18n-builder/README.md`](i18n-builder/README.md).
+- `src/proxy.ts` elige el idioma (cookie primero, después el header
+  `Accept-Language`, y si no, `en`) y redirige a la URL con prefijo.
+- Las claves están tipadas: `t('clave-inexistente')` falla en `pnpm typecheck`, y
+  `pnpm i18n:check` (también en CI) detecta claves faltantes entre idiomas.
+- Cada página bajo `app/[locale]` llama a `resolveRouteLocale` y, si tiene metadata,
+  usa `getAlternates` para el canonical y los links `hreflang`.
+- Para navegar, importá `Link`, `redirect`, `useRouter` y `usePathname` desde
+  `@/i18n/navigation` (no desde `next/link` ni `next/navigation`), así conservan el idioma.
+- En tests, renderizá con `renderWithIntl` de `@/test-utils/render-with-intl`.
 
 ## Next.js
 

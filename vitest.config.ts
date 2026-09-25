@@ -9,12 +9,20 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    globalSetup: ['./vitest.global-setup.ts'],
     setupFiles: ['./vitest.setup.ts'],
     exclude: ['node_modules', '.next', 'e2e', 'playwright-report', 'test-results'],
+    server: {
+      deps: {
+        // next-intl's ESM build imports `next/navigation` without an extension, which Node's
+        // resolver rejects; letting Vite process it resolves the import.
+        inline: ['next-intl'],
+      },
+    },
     coverage: {
       provider: 'v8',
-      include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/**/*.test.{ts,tsx}'],
+      include: ['src/**/*.{ts,tsx}', 'i18n-builder/build.ts'],
+      exclude: ['**/*.test.{ts,tsx}'],
       reporter: ['text', 'html'],
     },
   },

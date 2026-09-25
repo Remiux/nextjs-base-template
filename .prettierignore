@@ -6,3 +6,5 @@ coverage
 playwright-report
 test-results
 pnpm-lock.yaml
+messages/*.json
+messages/*.d.json.ts
