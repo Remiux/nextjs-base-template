@@ -5,7 +5,26 @@ updates:
     schedule:
       interval: 'weekly'
     open-pull-requests-limit: 10
+    ignore:
+      # @types/node tracks the lowest Node version in `engines.node`, not the latest.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
     groups:
+      # Packages that must move together, even across major versions.
+      nextjs:
+        patterns:
+          - 'next'
+          - 'eslint-config-next'
+      react:
+        patterns:
+          - 'react'
+          - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'
+      vitest:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
       minor-and-patch:
         update-types:
           - 'minor'

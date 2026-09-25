@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en,es",
+  "ignorePaths": [
+    "node_modules",
+    ".next",
+    "coverage",
+    "playwright-report",
+    "test-results",
+    "pnpm-lock.yaml",
+    "CHANGELOG.md"
+  ],
+  "words": [
+    "activá",
+    "cambiá",
+    "changeset",
+    "changesets",
+    "commitlint",
+    "Geist",
+    "Importá",
+    "jsdom",
+    "mergear",
+    "Mergear",
+    "nvmrc",
+    "podés",
+    "sumala",
+    "typegen",
+    "vitest"
+  ]
+}
