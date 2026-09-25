@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  version:
+    # Opens (or updates) a "Version Packages" PR that applies pending changesets.
+    # Requires "Allow GitHub Actions to create and approve pull requests" in the
+    # repository's Settings > Actions > General.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - uses: changesets/action@v2
+        with:
+          version-script: pnpm version-packages
+          commit-message: 'chore(release): version packages'
+          pr-title: 'chore(release): version packages'

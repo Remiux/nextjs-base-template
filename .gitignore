@@ -37,6 +37,7 @@ yarn-error.log*
 # editor
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea/
 
 # env files (can opt-in for committing if needed)
