@@ -7,11 +7,11 @@
     "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "pnpm i18n:build && concurrently -k -n i18n,next \"pnpm i18n:build --watch\" \"next dev\"",
+    "build": "pnpm i18n:build && next build",
     "start": "next start",
     "lint": "eslint --max-warnings=0",
-    "typecheck": "next typegen && tsc --noEmit",
+    "typecheck": "pnpm i18n:build && next typegen && tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
@@ -19,12 +19,15 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "i18n:build": "tsx i18n-builder/index.ts",
+    "i18n:check": "pnpm i18n:build && i18n-check --source en --locales messages --format next-intl --unused src",
     "prepare": "husky",
     "changeset": "changeset",
     "version-packages": "changeset version"
   },
   "dependencies": {
     "next": "16.3.6",
+    "next-intl": "^4.14.7",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "zod": "^4.6.5"
@@ -34,6 +37,7 @@
     "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^21.2.3",
     "@commitlint/types": "^21.2.3",
+    "@lingual/i18n-check": "^0.9.5",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^7.0.1",
@@ -46,6 +50,7 @@
     "@vitest/coverage-v8": "^5.0.2",
     "@vitest/eslint-plugin": "^1.6.27",
     "@vitest/ui": "^5.0.2",
+    "concurrently": "^10.0.5",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.3.6",
     "eslint-config-prettier": "^10.1.8",
@@ -59,6 +64,7 @@
     "prettier": "^3.9.9",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^6",
     "vitest": "^5.0.2"
   },

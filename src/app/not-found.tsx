@@ -1,20 +1,26 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'Page not found',
-};
+import { routing } from '@/i18n/routing';
 
-export default function NotFound() {
+import './globals.css';
+
+// Fallback for requests the proxy does not localize. Renders its own document because the root
+// layout passes children through, and uses the default locale's messages.
+export default async function RootNotFound() {
+  const locale = routing.defaultLocale;
+  const t = await getTranslations({ locale, namespace: 'not-found' });
+
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-4 px-6 py-24">
-      <h1 className="text-3xl font-semibold tracking-tight">Page not found</h1>
-      <p className="text-lg text-zinc-600 dark:text-zinc-400">
-        The page you are looking for does not exist.
-      </p>
-      <Link className="w-fit font-medium underline underline-offset-4" href="/">
-        Go back home
-      </Link>
-    </main>
+    <html lang={locale}>
+      <body className="flex min-h-screen flex-col items-center justify-center gap-4 font-sans">
+        <title>{t('title')}</title>
+        <h1 className="text-3xl font-semibold tracking-tight">{t('title')}</h1>
+        <p className="text-lg text-zinc-600 dark:text-zinc-400">{t('description')}</p>
+        <Link className="font-medium underline underline-offset-4" href={`/${locale}`}>
+          {t('back-home')}
+        </Link>
+      </body>
+    </html>
   );
 }

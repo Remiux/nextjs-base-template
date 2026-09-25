@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "description": "Una plantilla de Next.js con TypeScript, Tailwind CSS, internacionalización, tests y CI listos para usar."
+  },
+  "not-found": {
+    "title": "Página no encontrada",
+    "description": "La página que buscas no existe.",
+    "back-home": "Volver al inicio"
+  },
+  "error": {
+    "title": "Algo salió mal",
+    "retry": "Reintentar"
+  },
+  "locale-switcher": {
+    "label": "Idioma",
+    "locale": "{locale, select, en {English} es {Español} other {Desconocido}}"
+  }
+}
