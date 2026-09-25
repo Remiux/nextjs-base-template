@@ -7,7 +7,11 @@ import jestDom from 'eslint-plugin-jest-dom';
 import playwright from 'eslint-plugin-playwright';
 import testingLibrary from 'eslint-plugin-testing-library';
 
-const unitTestFiles = ['src/**/*.test.{ts,tsx}', 'i18n-builder/**/*.test.ts'];
+const unitTestFiles = [
+  'src/**/*.test.{ts,tsx}',
+  'i18n-builder/**/*.test.ts',
+  'scripts/**/*.test.ts',
+];
 
 const eslintConfig = defineConfig([
   ...nextVitals,

@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url';
+
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
@@ -6,6 +8,9 @@ export default defineConfig({
   resolve: {
     // Reuse the `paths` aliases from tsconfig.json (e.g. `@/*`) instead of redeclaring them.
     tsconfigPaths: true,
+    alias: {
+      'server-only': fileURLToPath(new URL('./vitest.server-only-shim.ts', import.meta.url)),
+    },
   },
   test: {
     environment: 'jsdom',

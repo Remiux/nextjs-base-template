@@ -14,40 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # A single job so the production build is installed and built once, then reused by the e2e tests.
   verify:
-    name: Verify (Node ${{ matrix.node-version }})
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      matrix:
-        # Keep in sync with `engines.node` in package.json.
-        node-version: [22, 24]
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: pnpm/action-setup@v6
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - run: pnpm format:check
-
-      - run: pnpm lint
-
-      - run: pnpm i18n:check
-
-      - run: pnpm typecheck
-
-      - run: pnpm test:coverage
-
-      - run: pnpm build
-
-  e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -62,8 +30,45 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm format:check
 
+      - run: pnpm lint
+
+      - run: pnpm knip
+
+      - run: pnpm i18n:check
+
+      - run: pnpm typecheck
+
+      - run: pnpm test:coverage
+
+      - uses: actions/cache@v6
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          # New cache when dependencies or sources change; fall back to the latest one for the same lockfile.
+          key: nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('src/**', 'i18n-builder/**', 'next.config.ts') }}
+          restore-keys: |
+            nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+
+      - run: pnpm build
+
+      - id: playwright
+        run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - id: playwright-cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+
+      - if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Cached browsers still need the system libraries they link against.
+      - if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
+
+      # Runs against the build above (`pnpm start`), see playwright.config.ts.
       - run: pnpm test:e2e
 
       - uses: actions/upload-artifact@v7

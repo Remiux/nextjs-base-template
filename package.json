@@ -11,6 +11,7 @@
     "build": "pnpm i18n:build && next build",
     "start": "next start",
     "lint": "eslint --max-warnings=0",
+    "knip": "knip",
     "typecheck": "pnpm i18n:build && next typegen && tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -23,16 +24,19 @@
     "i18n:check": "pnpm i18n:build && i18n-check --source en --locales messages --format next-intl --unused src",
     "prepare": "husky",
     "changeset": "changeset",
-    "version-packages": "changeset version"
+    "version-packages": "changeset version",
+    "init:project": "tsx scripts/init-project.ts"
   },
   "dependencies": {
     "next": "16.3.6",
     "next-intl": "^4.14.7",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "server-only": "^0.0.1",
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@changesets/cli": "^3.0.3",
     "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^21.2.3",
@@ -60,6 +64,7 @@
     "husky": "^9.1.7",
     "jiti": "^2.7.0",
     "jsdom": "^30.1.1",
+    "knip": "^6.38.0",
     "lint-staged": "^17.5.1",
     "prettier": "^3.9.9",
     "prettier-plugin-tailwindcss": "^0.8.1",

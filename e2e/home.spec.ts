@@ -22,3 +22,12 @@ test('robots.txt and the sitemap are served outside the locale routing', async (
   expect(sitemap.ok()).toBe(true);
   expect(await sitemap.text()).toContain('/es');
 });
+
+test('serves a localized Open Graph image', async ({ request }) => {
+  for (const locale of ['en', 'es']) {
+    const response = await request.get(`/${locale}/opengraph-image`);
+
+    expect(response.ok()).toBe(true);
+    expect(response.headers()['content-type']).toBe('image/png');
+  }
+});
