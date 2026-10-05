@@ -28,7 +28,7 @@
     "init:project": "tsx scripts/init-project.ts"
   },
   "dependencies": {
-    "next": "16.3.6",
+    "next": "16.3.8",
     "next-intl": "^4.14.7",
     "react": "19.3.0",
     "react-dom": "19.3.0",
@@ -56,7 +56,7 @@
     "@vitest/ui": "^5.0.2",
     "concurrently": "^10.0.5",
     "eslint": "^9.39.5",
-    "eslint-config-next": "16.3.6",
+    "eslint-config-next": "16.3.8",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jest-dom": "^5.10.1",
     "eslint-plugin-playwright": "^2.12.0",
