@@ -1,5 +1,11 @@
 # nextjs-base-template
 
+## 0.2.1
+
+### Patch Changes
+
+- fda52e9: Hold the MIT license in the name of Remiux, the template's new owner.
+
 ## 0.2.0
 
 ### Minor Changes
